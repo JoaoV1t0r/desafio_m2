@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\GroupController;
+use App\Http\Controllers\Api\ProductsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (){
@@ -16,4 +17,10 @@ Route::prefix('v1')->group(function (){
     Route::get('/group/{group}', [GroupController::class, 'show'])->name('show.group');
     Route::put('/group/{group}', [GroupController::class, 'update'])->name('update.group');
     Route::delete('/group/{group}', [GroupController::class, 'destroy'])->name('destroy.group');
+
+    Route::get('/product', [ProductsController::class, 'index'])->name('index.product');
+    Route::post('/product', [ProductsController::class, 'store'])->name('store.product');
+    Route::get('/product/{group}', [ProductsController::class, 'show'])->name('show.product');
+    Route::put('/product/{group}', [ProductsController::class, 'update'])->name('update.product');
+    Route::delete('/product/{group}', [ProductsController::class, 'destroy'])->name('destroy.product');
 });

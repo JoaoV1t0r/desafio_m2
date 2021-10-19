@@ -4,83 +4,128 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Products;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
-    }
+        $response = [
+            'success' => true,
+            'message' => 'Busca realizada com sucesso.',
+            'data' => Products::all()
+        ];
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($response);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
-        //
+        //VALIDATING OF PARAMETERS
+        $validated = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255', "unique:products,name"],
+            'value' => ['required', 'float'],
+        ]);
+
+        if ($validated->fails()) :
+            $content = array(
+                'success' => false,
+                'message' => "Erro nos dados do produto",
+                'errors' => $validated->errors()
+            );
+            return response($content)->setStatusCode(400);
+        endif;
+
+        Products::create([
+            'name' => $request->get('name'),
+            'value' => $request->get('value')
+        ]);
+
+        //RETURN SUCCESS
+        $content = array(
+            'success' => true,
+            'message' => "Produto criado com sucesso."
+        );
+
+        return response($content)->setStatusCode(201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Products  $products
-     * @return \Illuminate\Http\Response
+     * @param Products $products
+     * @return JsonResponse
      */
-    public function show(Products $products)
+    public function show(Products $products): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Products  $products
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Products $products)
-    {
-        //
+        $response = [
+            'success' => true,
+            'message' => 'Busca realizada com sucesso.',
+            'data' => $products
+        ];
+        return response()->json($response);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Products  $products
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Products $products
+     * @return Response
      */
-    public function update(Request $request, Products $products)
+    public function update(Request $request, Products $products): Response
     {
-        //
+        //VALIDATING OF PARAMETERS
+        $validated = Validator::make($request->all(), [
+            'name' => [ 'string', 'max:255', "unique:products,name"],
+            'value' => [ 'float'],
+        ]);
+
+        if ($validated->fails()) :
+            $content = array(
+                'success' => false,
+                'message' => "Erro nos dados do produto",
+                'errors' => $validated->errors()
+            );
+            return response($content)->setStatusCode(400);
+        endif;
+
+        $products->name = $request->get('name') ?? $products->name;
+        $products->value = $request->get('value') ?? $products->value;
+        $products->update();
+
+        //RETURN SUCCESS
+        $content = array(
+            'success' => true,
+            'message' => "Produto atualizado com sucesso."
+        );
+
+        return response($content)->setStatusCode(201);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Products  $products
-     * @return \Illuminate\Http\Response
+     * @param Products $products
+     * @return JsonResponse
      */
-    public function destroy(Products $products)
+    public function destroy(Products $products): JsonResponse
     {
-        //
+        $products->delete();
+        return response()->json([], 204);
     }
 }
