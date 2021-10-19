@@ -38,7 +38,7 @@ class CampaignController extends Controller
         //VALIDATING OF PARAMETERS
         $validated = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255', "unique:products,name"],
-            'discount' => ['required', 'float'],
+            'discount' => ['required', 'numeric'],
         ]);
 
         if ($validated->fails()) :
@@ -92,7 +92,7 @@ class CampaignController extends Controller
         //VALIDATING OF PARAMETERS
         $validated = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255', "unique:products,name,{$campaign->name}"],
-            'discount' => ['required', 'float'],
+            'discount' => ['required', 'numeric'],
         ]);
 
         if ($validated->fails()) :
