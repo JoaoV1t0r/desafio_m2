@@ -14,4 +14,8 @@ class City extends Model
         'id',
         'name'
     ];
+    /**
+     * @var mixed
+     */
+    private $name;
 }
