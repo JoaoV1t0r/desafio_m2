@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CampaignController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\ProductsController;
@@ -23,4 +24,12 @@ Route::prefix('v1')->group(function (){
     Route::get('/product/{group}', [ProductsController::class, 'show'])->name('show.product');
     Route::put('/product/{group}', [ProductsController::class, 'update'])->name('update.product');
     Route::delete('/product/{group}', [ProductsController::class, 'destroy'])->name('destroy.product');
+
+    Route::get('/campaign', [CampaignController::class, 'index'])->name('index.campaign');
+    Route::post('/campaign', [CampaignController::class, 'store'])->name('store.campaign');
+    Route::get('/campaign/{group}', [CampaignController::class, 'show'])->name('show.campaign');
+    Route::put('/campaign/{group}', [CampaignController::class, 'update'])->name('update.campaign');
+    Route::delete('/campaign/{group}', [CampaignController::class, 'destroy'])->name('destroy.campaign');
+
+
 });

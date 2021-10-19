@@ -91,7 +91,7 @@ class ProductsController extends Controller
     {
         //VALIDATING OF PARAMETERS
         $validated = Validator::make($request->all(), [
-            'name' => [ 'string', 'max:255', "unique:products,name"],
+            'name' => [ 'string', 'max:255', "unique:products,name,{$products->name}"],
             'value' => [ 'float'],
         ]);
 
