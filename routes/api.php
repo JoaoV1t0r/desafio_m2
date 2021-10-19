@@ -13,7 +13,7 @@ Route::prefix('v1')->group(function (){
 
     Route::get('/group', [GroupController::class, 'index'])->name('index.group');
     Route::post('/group', [GroupController::class, 'store'])->name('store.group');
-    Route::get('/group/{city}', [GroupController::class, 'show'])->name('show.group');
-    Route::put('/group/{city}', [GroupController::class, 'update'])->name('update.group');
-    Route::delete('/group/{city}', [GroupController::class, 'destroy'])->name('destroy.group');
+    Route::get('/group/{group}', [GroupController::class, 'show'])->name('show.group');
+    Route::put('/group/{group}', [GroupController::class, 'update'])->name('update.group');
+    Route::delete('/group/{group}', [GroupController::class, 'destroy'])->name('destroy.group');
 });
