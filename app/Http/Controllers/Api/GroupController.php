@@ -38,7 +38,7 @@ class GroupController extends Controller
     {
         //VALIDATING OF PARAMETERS
         $validated = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255', Rule::unique('cities', 'name')],
+            'name' => ['required', 'string', 'max:255', Rule::unique('groups', 'name')],
         ]);
 
         if ($validated->fails()) :
@@ -88,7 +88,7 @@ class GroupController extends Controller
     {
         //VALIDATING OF PARAMETERS
         $validated = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255', "unique:cities,name,{$group->name}"],
+            'name' => ['required', 'string', 'max:255', "unique:groups,name,{$group->name}"],
         ]);
 
         if ($validated->fails()) :
