@@ -73,7 +73,7 @@ class CityController extends Controller
         $response = [
             'success' => true,
             'message' => 'Busca realizada com sucesso.',
-            'data' => $city->group()
+            'data' => $city
         ];
         return response()->json($response);
     }

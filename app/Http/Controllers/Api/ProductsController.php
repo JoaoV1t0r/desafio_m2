@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Products;
+use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,7 +21,7 @@ class ProductsController extends Controller
         $response = [
             'success' => true,
             'message' => 'Busca realizada com sucesso.',
-            'data' => Products::all()
+            'data' => Product::all()
         ];
 
         return response()->json($response);
@@ -50,7 +50,7 @@ class ProductsController extends Controller
             return response($content)->setStatusCode(400);
         endif;
 
-        Products::create([
+        Product::create([
             'name' => $request->get('name'),
             'value' => $request->get('value')
         ]);
@@ -67,10 +67,10 @@ class ProductsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Products $products
+     * @param Product $products
      * @return JsonResponse
      */
-    public function show(Products $products): JsonResponse
+    public function show(Product $products): JsonResponse
     {
         $response = [
             'success' => true,
@@ -84,10 +84,10 @@ class ProductsController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param Products $products
+     * @param Product $products
      * @return Response
      */
-    public function update(Request $request, Products $products): Response
+    public function update(Request $request, Product $products): Response
     {
         //VALIDATING OF PARAMETERS
         $validated = Validator::make($request->all(), [
@@ -120,10 +120,10 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Products $products
+     * @param Product $products
      * @return JsonResponse
      */
-    public function destroy(Products $products): JsonResponse
+    public function destroy(Product $products): JsonResponse
     {
         $products->delete();
         return response()->json([], 204);

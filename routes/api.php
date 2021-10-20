@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CampaignController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\GroupController;
+use App\Http\Controllers\Api\ProductCampaignController;
 use App\Http\Controllers\Api\ProductsController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,9 @@ Route::prefix('v1')->group(function (){
     Route::get('/product/{product}', [ProductsController::class, 'show'])->name('show.product');
     Route::put('/product/{product}', [ProductsController::class, 'update'])->name('update.product');
     Route::delete('/product/{product}', [ProductsController::class, 'destroy'])->name('destroy.product');
+
+    Route::post('/product_campaign', [ProductCampaignController::class, 'store'])->name('store.product_campaign');
+    Route::delete('/product_campaign/{product_campaign}', [ProductCampaignController::class, 'destroy'])->name('destroy.product');
 
     Route::get('/campaign', [CampaignController::class, 'index'])->name('index.campaign');
     Route::post('/campaign', [CampaignController::class, 'store'])->name('store.campaign');

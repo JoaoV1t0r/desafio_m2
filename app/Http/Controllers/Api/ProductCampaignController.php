@@ -4,83 +4,57 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductCampaign;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProductCampaignController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
-        //
-    }
+        //VALIDATING OF PARAMETERS
+        $validated = Validator::make($request->all(), [
+            'product_id' => ['required', 'numeric', Rule::unique('products', 'name')],
+            'campaign_id' => ['required', 'numeric', Rule::exists('campaigns', 'id')]
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ProductCampaign  $productCampaign
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ProductCampaign $productCampaign)
-    {
-        //
-    }
+        if ($validated->fails()) :
+            $content = array(
+                'success' => false,
+                'message' => "Erro ao adicionar o produto á campanha.",
+                'errors' => $validated->errors()
+            );
+            return response($content)->setStatusCode(400);
+        endif;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ProductCampaign  $productCampaign
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ProductCampaign $productCampaign)
-    {
-        //
-    }
+        ProductCampaign::create(['product_id' => $request->get('product_id'), 'campaign_id' => $request->get('campaign_id')]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductCampaign  $productCampaign
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ProductCampaign $productCampaign)
-    {
-        //
+        //RETURN SUCCESS
+        $content = array(
+            'success' => true,
+            'message' => "Produto adicionado á campanha."
+        );
+
+        return response($content)->setStatusCode(201);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductCampaign  $productCampaign
-     * @return \Illuminate\Http\Response
+     * @param ProductCampaign $productCampaign
+     * @return JsonResponse
      */
-    public function destroy(ProductCampaign $productCampaign)
+    public function destroy(ProductCampaign $productCampaign): JsonResponse
     {
-        //
+        $productCampaign->delete();
+        return response()->json([], 204);
     }
 }

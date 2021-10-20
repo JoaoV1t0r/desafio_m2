@@ -23,7 +23,7 @@ class CampaignController extends Controller
         $response = [
             'success' => true,
             'message' => 'Busca realizada com sucesso.',
-            'data' => Campaign::all()
+            'data' => Campaign::with(['products', 'groups'])->get()
         ];
 
         return response()->json($response);
