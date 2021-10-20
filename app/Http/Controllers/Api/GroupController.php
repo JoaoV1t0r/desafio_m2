@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\City;
 use App\Models\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +24,7 @@ class GroupController extends Controller
         $response = [
             'success' => true,
             'message' => 'Busca realizada com sucesso.',
-            'data' => Group::all()
+            'data' => Group::with(['cities', 'campaign'])->get()
         ];
 
         return response()->json($response);
@@ -39,6 +41,7 @@ class GroupController extends Controller
         //VALIDATING OF PARAMETERS
         $validated = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255', Rule::unique('groups', 'name')],
+            'campaign_id' => ['required', 'numeric', Rule::exists('campaigns', 'id')]
         ]);
 
         if ($validated->fails()) :
@@ -50,7 +53,7 @@ class GroupController extends Controller
             return response($content)->setStatusCode(400);
         endif;
 
-        Group::create(['name' => $request->get('name')]);
+        Group::create(['name' => $request->get('name'), 'campaign_id' => $request->get('campaign_id')]);
 
         //RETURN SUCCESS
         $content = array(
@@ -88,7 +91,8 @@ class GroupController extends Controller
     {
         //VALIDATING OF PARAMETERS
         $validated = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255', "unique:groups,name,{$group->name}"],
+            'name' => ['string', 'max:255', "unique:groups,name,{$group->name}"],
+            'campaign_id' => ['numeric', Rule::exists('campaigns', 'id')]
         ]);
 
         if ($validated->fails()) :
@@ -100,7 +104,8 @@ class GroupController extends Controller
             return response($content)->setStatusCode(400);
         endif;
 
-        $group->name = $request->get("name");
+        $group->name = $request->get("name") ?? $group->name;
+        $group->campaign_id = $request->get("campaign_id") ?? $group->campaign_id;
         $group->update();
 
         //RETURN SUCCESS
@@ -120,6 +125,7 @@ class GroupController extends Controller
      */
     public function destroy(Group $group): JsonResponse
     {
+        DB::table('cities')->where('group_id', '=',$group->id)->delete();
         $group->delete();
         return response()->json([], 204);
     }

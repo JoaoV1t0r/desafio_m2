@@ -18,7 +18,6 @@ class CreateProductCampaignsTable extends Migration
             $table->foreignId('product_id')->constrained('products');
             $table->foreignId('campaign_id')->constrained('campaigns');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -15,6 +15,7 @@ class CreateCitiesTable extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('group_id')->constrained('groups');
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

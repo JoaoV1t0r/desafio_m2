@@ -10,12 +10,16 @@ class City extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public $group;
+
     protected $fillable = [
         'id',
-        'name'
+        'name',
+        'group_id'
     ];
-    /**
-     * @var mixed
-     */
-    private $name;
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class );
+    }
 }

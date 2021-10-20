@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
+use App\Models\City;
+use App\Models\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -125,6 +127,12 @@ class CampaignController extends Controller
      */
     public function destroy(Campaign $campaign)
     {
+        $groups = Group::where('campaign_id', $campaign->id)->get();
+
+        foreach ($groups as $group){
+            City::where('group_id', $group->id)->delete();
+            $group->delete();
+        }
         $campaign->delete();
         return response()->json([], 204);
     }
