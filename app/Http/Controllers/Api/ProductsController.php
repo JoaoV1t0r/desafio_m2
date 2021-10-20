@@ -21,7 +21,7 @@ class ProductsController extends Controller
         $response = [
             'success' => true,
             'message' => 'Busca realizada com sucesso.',
-            'data' => Product::all()
+            'data' => Product::with('campaigns')->get()
         ];
 
         return response()->json($response);
