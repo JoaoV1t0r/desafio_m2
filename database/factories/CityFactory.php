@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\City;
+use App\Models\Group;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CityFactory extends Factory
@@ -22,7 +23,8 @@ class CityFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->city,
+            'group_id'=> Group::factory()
         ];
     }
 }

@@ -22,7 +22,8 @@ class CampaignFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->jobTitle(),
+            'discount' => $this->faker->randomFloat(2,0, 20)
         ];
     }
 }

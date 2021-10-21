@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProductsFactory extends Factory
+class ProductFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
@@ -22,7 +22,8 @@ class ProductsFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'value' => $this->faker->randomFloat(2,0,500)
         ];
     }
 }

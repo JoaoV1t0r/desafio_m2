@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
+use App\Models\ProductCampaign;
 use Illuminate\Database\Seeder;
 
 class ProductCampaignSeeder extends Seeder
@@ -13,6 +15,6 @@ class ProductCampaignSeeder extends Seeder
      */
     public function run()
     {
-        //
+        ProductCampaign::factory()->create();
     }
 }
